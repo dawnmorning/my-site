@@ -6,7 +6,7 @@ body			{ font:0.75em "맑은 고딕", 돋움, 굴림; text-align:center }
 ul, ol			{ list-style-type: none }
 
 /* layout */
-div#container	{ text-align:left; width:700px; margin:0 auto; background-color:#EEE }
+div#container	{ text-align:left; width:100%; background-color:#EEE }
 div#content		{ float:right; width:580px; background-color:#fff }
 div#navigation	{ float:left; width:120px;  }
 div#footer		{ clear:both; width:100% }
