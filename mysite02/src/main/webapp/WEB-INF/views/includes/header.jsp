@@ -4,9 +4,6 @@
 	pageEncoding="UTF-8"%>
 	<% 
 		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		Long userNo = authUser.getNo();
-		UserDao userDao = new UserDao();
-		UserVo userInfo = userDao.GetUserByNo(userNo);
 	%>
 <div id="header">
 	<h1>MySite</h1>
@@ -17,7 +14,7 @@
 		<% } else { %>
 		<li><a href="<%=request.getContextPath()%>/user?a=updateform">회원정보수정</a><li>
 		<li><a href="<%=request.getContextPath()%>/user?a=logout">">로그아웃</a><li>
-		<li><%= userInfo.getName() %>님 안녕하세요 ^^;</li>
+		<li><%= authUser.getName() %>님 안녕하세요 ^^;</li>
 		<% } %>
 	</ul>
 </div>
