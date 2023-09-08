@@ -4,9 +4,12 @@
 	pageEncoding="UTF-8"%>
 <%
 UserVo authUser = (UserVo) session.getAttribute("authUser");
-Long userNo = authUser.getNo();
-UserDao userDao = new UserDao();
-UserVo userInfo = userDao.GetUserByNo(userNo);
+UserVo userInfo = null;
+if(authUser != null) {
+    Long userNo = authUser.getNo();
+    UserDao userDao = new UserDao();
+    userInfo = userDao.GetUserByNo(userNo);
+}
 %>
 <!DOCTYPE html>
 <html>
