@@ -1,22 +1,14 @@
-<%@page import="com.poscodx.mysite.dao.UserDao"%>
-<%@page import="com.poscodx.mysite.vo.UserVo"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%
-UserVo authUser = (UserVo) session.getAttribute("authUser");
-UserVo userInfo = null;
-if(authUser != null) {
-    Long userNo = authUser.getNo();
-    UserDao userDao = new UserDao();
-    userInfo = userDao.GetUserByNo(userNo);
-}
-%>
 <!DOCTYPE html>
 <html>
 <head>
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="<%=request.getContextPath()%>/assets/css/user.css"
+<link href="${pageContext.request.contextPath }/assets/css/user.css"
 	rel="stylesheet" type="text/css">
 </head>
 <body>
@@ -26,35 +18,25 @@ if(authUser != null) {
 			<div id="user">
 
 				<form id="join-form" name="joinForm" method="post"
-					action="<%=request.getContextPath()%>/user">
-					<input type="hidden" name="a" value="update"> 
-					<input type="hidden" name="userNo" value="<%=userInfo.getNo() %>">
+					action="${pageContext.request.contextPath }/user">
+					<input type="hidden" name="a" value="update"> <input
+					type="hidden" name="userNo" value="${authUser.no }"> 
 					<label class="block-label" for="name">이름</label> 
-					<input id="name" name="name" type="text" value="<%=userInfo.getName()%>">
-						
-					<label class ="block-label" for="email">이메일</label>
-					<h4><%= userInfo.getEmail() %></h4>
+					<input id="name" name="name" type="text" value="${authUser.name }">
+					<label class="block-label" for="email">이메일</label>
+					<h4>${user.email }</h4>
 
 					<label class="block-label">패스워드</label> <input name="password"
 						type="password" value="">
 
 					<fieldset>
 						<legend>성별</legend>
-						<%
-						if ("female".equals(userInfo.getGender())) {
-						%>
-						<label>여</label> <input type="radio" name="gender" value="female"
-							checked="checked"> <label>남</label> <input type="radio"
-							name="gender" value="male">
-						<%
-						} else {
-						%>
-						<label>여</label> <input type="radio" name="gender" value="female">
-						<label>남</label> <input type="radio" name="gender" value="male"
-							checked="checked">
-						<%
-						}
-						%>
+						<label>여</label>
+						<input type="radio" name="gender" value="female"
+							${user.gender == 'female' ? 'checked="checked"' : ''}>
+						<label>남</label> 
+						<input type="radio" name="gender" value="male"
+							${user.gender == 'male' ? 'checked="checked"' : ''}>
 					</fieldset>
 
 

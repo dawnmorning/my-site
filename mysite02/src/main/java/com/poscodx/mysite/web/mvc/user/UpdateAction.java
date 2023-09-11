@@ -15,8 +15,6 @@ public class UpdateAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		HttpSession session = request.getSession();
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		String userNo = request.getParameter("userNo");
 		String name = request.getParameter("name");
 		String password = request.getParameter("password");

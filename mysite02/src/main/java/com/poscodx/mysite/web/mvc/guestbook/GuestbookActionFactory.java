@@ -1,13 +1,5 @@
 package com.poscodx.mysite.web.mvc.guestbook;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.RequestDispatcher;
-
-import com.poscodx.mysite.dao.GuestBookDao;
-import com.poscodx.mysite.vo.GuestBookVo;
 import com.poscodx.web.mvc.Action;
 import com.poscodx.web.mvc.ActionFactory;
 
