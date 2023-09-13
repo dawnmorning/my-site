@@ -31,20 +31,21 @@
 					</tr>
 					<c:forEach var="item" items="${list }" varStatus="status">
 					<c:set var="idx" value="${fn:length(list) }" />
-					<tr>
-							<td>${idx - status.index }</td>
-							<!-- padding 계산해야 함  vo.depth-1 -->
-							<td style="padding-left: ${(item.depth-1)} * 30">
-							<c:if test="${item.depth >= 2 }">
-								<img src="${pageContext.request.contextPath }/assets/images/reply.png"/>
-							</c:if>
-							<a href="${pageContext.request.contextPath }/board?b=view&no=${item.no }">${item.title }</a></td>
-							<td>${item.userName }</td>
-							<td>${item.hit }</td>
-							<td>${item.date }</td>
-							<td><a href="" class="del">삭제</a></td>
-						</c:forEach>
-					</tr>
+						<tr>
+								<td>${idx - status.index }</td>
+								<!-- padding 계산해야 함  vo.depth-1 -->
+								<td style="padding-left: ${(item.depth-1)* 30}px ">
+									<c:if test="${item.depth >= 2 }">
+										<img src="${pageContext.request.contextPath }/assets/images/reply.png"/>
+									</c:if>
+									<a href="${pageContext.request.contextPath }/board?b=view&no=${item.boardNo }">${item.title }</a>
+								</td>
+								<td>${item.userName }</td>
+								<td>${item.hit }</td>
+								<td>${item.date }</td>
+								<td><a href="${pageContext.request.contextPath }/board?b=delete&no=${item.boardNo}" class="del">삭제</a></td>
+						</tr>
+					</c:forEach>
 				</table>
 				<!-- pager 추가 -->
 				<div class="pager">

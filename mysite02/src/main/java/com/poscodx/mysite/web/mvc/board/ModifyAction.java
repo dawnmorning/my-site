@@ -7,19 +7,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.poscodx.mysite.dao.BoardDao;
-import com.poscodx.mysite.vo.BoardVo;
 import com.poscodx.web.mvc.Action;
 
-public class ReadBoardAction implements Action {
+public class ModifyAction implements Action {
 
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		
+		String title = request.getParameter("title");
+		String contents = request.getParameter("contents");
 		String no = request.getParameter("no");
-		BoardVo board = new BoardDao().getBoardByNo(no);
-		new BoardDao().updateHit(no);
-		request.setAttribute("board", board);
-
-		request.getRequestDispatcher("/WEB-INF/views/board/view.jsp").forward(request, response);
+		
+		new BoardDao().modifyBoardByNo(no, title, contents);
+		response.sendRedirect("/mysite02/board?b=view&no="+no);
 	}
 
 }

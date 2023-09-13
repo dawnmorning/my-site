@@ -19,9 +19,12 @@ public class WriteBoardAction implements Action {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		HttpSession session = request.getSession();
 		UserVo authUser = (UserVo) session.getAttribute("authUser");
+
 		if (authUser == null) {
 			response.sendRedirect(request.getContextPath() + "/user?a=login");
 			return;
+		} else {
+			request.setAttribute("authUser", authUser);
 		}
 		String title = request.getParameter("title");
 		String contents = request.getParameter("contents");
@@ -44,13 +47,15 @@ public class WriteBoardAction implements Action {
 			vo.setDepth(1);
 			vo.setO_no(1);
 		} else {
-			BoardVo vo2 = new BoardDao().getBoardByNo(no);
-			vo.setG_no(vo2.getG_no());
-			vo.setO_no(vo2.getO_no() + 1);
-			vo.setDepth(vo2.getDepth() + 1);
+			BoardVo existedVo = new BoardDao().getBoardByNo(no);
+			vo.setDate(reg_Date);
+			vo.setG_no(existedVo.getG_no());
+			vo.setO_no(existedVo.getO_no() + 1);
+			vo.setDepth(existedVo.getDepth() + 1);
+			new BoardDao().Update(existedVo.getG_no(),existedVo.getO_no()+1);
 		}
 		new BoardDao().insert(vo);
-		System.out.println(title + contents + currentDate + reg_Date + user_no + no);
+		System.out.println(title + contents + currentDate + reg_Date + user_no + no + " " + vo.getG_no() + " " + vo.getO_no() + " " + vo.getDepth());
 		response.sendRedirect("/mysite02/board");
 	}
 

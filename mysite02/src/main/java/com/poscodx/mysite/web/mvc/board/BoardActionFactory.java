@@ -14,6 +14,12 @@ public class BoardActionFactory implements ActionFactory {
 			action = new WriteBoardAction();
 		}else if("view".equals(actionName)) {
 			action = new ReadBoardAction();
+		}else if("modifyform".equals(actionName)) {
+			action = new ModifyFormAction();
+		}else if("modify".equals(actionName)) {
+			action = new ModifyAction();
+		}else if("delete".equals(actionName)) {
+			action = new DeleteAction();
 		}
 		else {
 			action = new MainBoardAction();			

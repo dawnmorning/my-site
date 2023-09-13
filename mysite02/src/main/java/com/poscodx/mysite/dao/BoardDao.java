@@ -118,6 +118,7 @@ public class BoardDao {
 				result.setO_no(rs.getInt("o_no"));
 				result.setDepth(rs.getInt("depth"));
 				result.setUser_no(rs.getLong("user_no"));
+
 			}
 		} catch (ClassNotFoundException e) {
 			System.out.println("드라이버 로딩 실패:" + e);
@@ -291,5 +292,157 @@ public class BoardDao {
 			e.printStackTrace();
 		}
 		return conn;
+	}
+
+	public void Update(int g_no, int o_no) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = getConnection();
+
+			String sql = "update board" + " set o_no = o_no + 1" + " where g_no = ? and o_no >= ?";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, g_no);
+			pstmt.setInt(2, o_no);
+			pstmt.executeUpdate();
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
+
+	public void modifyBoardByNo(String no, String title, String contents) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			// 1. JDBC Driver Class 로딩
+			Class.forName("org.mariadb.jdbc.Driver");
+			// 2. 연결하기
+			String url = "jdbc:mariadb://192.168.0.174:3307/webdb?chraset=utf8";
+			// getConnection (url, 계정이름, 비밀번호)
+			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			// 3. sql 준비
+			String sql = "update board " + " set title=?, contents=?, reg_date=current_time() " + " where no=?;";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, title);
+			pstmt.setString(2, contents);
+			pstmt.setInt(3, Integer.parseInt(no));
+			pstmt.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			System.out.println("드라이버 로딩 실패:" + e);
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				// 7. 자원 처리
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void deleteBoardByNo(String no) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			// 1. JDBC Driver Class 로딩
+			Class.forName("org.mariadb.jdbc.Driver");
+			// 2. 연결하기
+			String url = "jdbc:mariadb://192.168.0.174:3307/webdb?chraset=utf8";
+			// getConnection (url, 계정이름, 비밀번호)
+			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			// 3. sql 준비
+			String sql = "delete from board where no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(no));
+			pstmt.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			System.out.println("드라이버 로딩 실패:" + e);
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				// 7. 자원 처리
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void updateHit(String no) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			// 1. JDBC Driver Class 로딩
+			Class.forName("org.mariadb.jdbc.Driver");
+			// 2. 연결하기
+			String url = "jdbc:mariadb://192.168.0.174:3307/webdb?chraset=utf8";
+			// getConnection (url, 계정이름, 비밀번호)
+			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			// 3. sql 준비
+			String sql = "update board "
+					+ " set hit = hit + 1 "
+					+ " where no=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(no));
+			pstmt.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			System.out.println("드라이버 로딩 실패:" + e);
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				// 7. 자원 처리
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
