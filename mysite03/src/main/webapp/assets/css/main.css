@@ -1,0 +1,27 @@
+@CHARSET "UTF-8";
+@import "mysite.css";
+
+#site-introduction {
+	padding: 20px;
+	width: 100%;
+}
+
+#site-introduction img#profile {
+	display: block;
+	width: 100%;
+	height: 100%;
+	border-radius: 30%
+}
+
+#site-introduction h2 {
+	float: left;
+	width: 100%;
+	margin: 25px 0 0 20px
+}
+
+#site-introduction p {
+	clear: both;
+	font-size: 1.1em;
+	padding: 20px;
+	line-height: 1.5em
+}
