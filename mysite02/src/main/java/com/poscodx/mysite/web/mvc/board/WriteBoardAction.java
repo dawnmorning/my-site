@@ -35,7 +35,7 @@ public class WriteBoardAction implements Action {
 		BoardVo vo = new BoardVo();
 		vo.setTitle(title);
 		vo.setContents(contents);
-		vo.setDate(reg_Date);
+		vo.setReg_date(reg_Date);
 
 		long user_no = authUser.getNo();
 		vo.setUser_no(user_no);
@@ -48,7 +48,7 @@ public class WriteBoardAction implements Action {
 			vo.setO_no(1);
 		} else {
 			BoardVo existedVo = new BoardDao().getBoardByNo(no);
-			vo.setDate(reg_Date);
+			vo.setReg_date(reg_Date);
 			vo.setG_no(existedVo.getG_no());
 			vo.setO_no(existedVo.getO_no() + 1);
 			vo.setDepth(existedVo.getDepth() + 1);

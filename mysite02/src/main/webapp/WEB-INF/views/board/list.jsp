@@ -20,8 +20,9 @@
 		<div id="wrapper">
 			<div id="content">
 				<div id="board">
-					<form id="search_form" action="" method="post">
-						<input type="text" id="kwd" name="kwd" value=""> <input
+					<form id="search_form"
+						action="${pageContext.request.contextPath }/board" method="get">
+						<input type="text" id="kwd" name="kwd" value="${kwd}"> <input
 							type="submit" value="찾기">
 					</form>
 					<table class="tbl-ex">
@@ -34,43 +35,61 @@
 							<th>&nbsp;</th>
 						</tr>
 						<c:forEach var="item" items="${list }" varStatus="status">
-						<c:set var="idx" value="${fn:length(list) }" />
+							<c:set var="idx" value="${fn:length(list) }" />
 							<tr>
-									<td>${idx - status.index }</td>
-									<!-- padding 계산해야 함  vo.depth-1 -->
-									<td style="padding-left: ${(item.depth-1)* 30}px ">
-										<c:if test="${item.depth >= 2 }">
-											<img src="${pageContext.request.contextPath }/assets/images/reply.png"/>
-										</c:if>
-										<a href="${pageContext.request.contextPath }/board?b=view&no=${item.boardNo }">${item.title }</a>
-									</td>
-									<td>${item.userName }</td>
-									<td>${item.hit }</td>
-									<td>${item.date }</td>
-									<td><a href="${pageContext.request.contextPath }/board?b=delete&no=${item.boardNo}" class="del">삭제</a></td>
+								<td>${item.no }</td>
+								<!-- padding 계산해야 함  vo.depth-1 -->
+								<td style="padding-left: ${(item.depth-1)* 30}px "><c:if
+										test="${item.depth >= 2 }">
+										<img
+											src="${pageContext.request.contextPath }/assets/images/reply.png" />
+									</c:if> <a
+									href="${pageContext.request.contextPath }/board?b=view&no=${item.no }&curPage=${currentPage}">${item.title }</a>
+								</td>
+								<td>${item.userName }</td>
+								<td>${item.hit }</td>
+								<td>${item.reg_date }</td>
+								<td><a
+									href="${pageContext.request.contextPath }/board?b=delete&no=${item.no}"
+									class="del">삭제</a></td>
 							</tr>
 						</c:forEach>
 					</table>
 					<!-- pager 추가 -->
 					<div class="pager">
 						<ul>
-							<li><a href="">◀</a></li>
-							<li><a href="">1</a></li>
-							<li class="selected">2</li>
-							<li><a href="">3</a></li>
-							<li>4</li>
-							<li>5</li>
-							<li><a href="">▶</a></li>
+							<!-- 이전 페이지 그룹 링크 -->
+							<c:if test="${startPage > 1}">
+								<li><a href="?page=${startPage - 1}&kwd=${kwd}">◀</a></li>
+							</c:if>
+
+							<!-- 페이지 번호 출력 -->
+							<c:forEach var="i" begin="${startPage}" end="${endPage}">
+								<c:choose>
+									<c:when test="${i == currentPage}">
+										<li class="selected">${i}</li>
+									</c:when>
+									<c:otherwise>
+										<li><a href="?page=${i}&kwd=${kwd}">${i}</a></li>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+
+							<!-- 다음 페이지 그룹 링크 -->
+							<c:if test="${endPage < totalPages}">
+								<li><a href="?page=${endPage + 1}&kwd=${kwd}">▶</a></li>
+							</c:if>
 						</ul>
 					</div>
 					<!-- pager 추가 -->
 					<div class="bottom">
-						<a href="${pageContext.request.contextPath }/board?b=writeform" id="new-book">글쓰기</a>
+						<a href="${pageContext.request.contextPath }/board?b=writeform"
+							id="new-book">글쓰기</a>
 					</div>
 				</div>
 			</div>
 		</div>
-		
+
 		<c:import url="/WEB-INF/views/includes/footer.jsp" />
 	</div>
 </body>

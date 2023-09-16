@@ -1,5 +1,6 @@
 @CHARSET "UTF-8";
 @import "mysite.css";
+a {text-decoration-line: none;}
 
 #site-introduction {
 	padding: 20px;

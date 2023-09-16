@@ -15,9 +15,11 @@ public class ReadBoardAction implements Action {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String no = request.getParameter("no");
+		String currentPage = request.getParameter("curPage");
 		BoardVo board = new BoardDao().getBoardByNo(no);
 		new BoardDao().updateHit(no);
 		request.setAttribute("board", board);
+		request.setAttribute("currentPage", currentPage);
 
 		request.getRequestDispatcher("/WEB-INF/views/board/view.jsp").forward(request, response);
 	}

@@ -1,9 +1,10 @@
 @charset "UTF-8";
 @import "mysite.css";
+a{color: black;}
 
 #board { margin:20px auto;	width:550px; }
 
-
+div#wrapper 	{ display: flex; justify-content: center; align-items: center; height:calc(100%-60px);} 
 #search_form {
 	width:100%;
 	margin:50px auto 20px auto; 

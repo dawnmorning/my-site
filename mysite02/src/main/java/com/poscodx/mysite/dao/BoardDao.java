@@ -12,25 +12,39 @@ import com.poscodx.mysite.vo.BoardVo;
 
 public class BoardDao {
 
-	public List<BoardVo> findAll() {
+	private Connection getConnection() throws SQLException {
+		Connection conn = null;
+		// 1. JDBC Driver Class 로딩
+		try {
+			Class.forName("org.mariadb.jdbc.Driver");
+			// 2. 연결하기
+			String url = "jdbc:mariadb://192.168.0.174:3307/webdb?charset=utf8";
+			// getConnection (url, 계정이름, 비밀번호)
+			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			System.out.println("연결 성공");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		return conn;
+	}
+
+	public List<BoardVo> findPageByKeyword(int currentPage, int itemsPerPage, String searchKeyword) {
 		List<BoardVo> result = new ArrayList<BoardVo>();
+		int offset = (currentPage - 1) * itemsPerPage;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			// 1. JDBC Driver Class 로딩
-			Class.forName("org.mariadb.jdbc.Driver");
-			// 2. 연결하기
-			String url = "jdbc:mariadb://192.168.0.174:3307/webdb?chraset=utf8";
-			// getConnection (url, 계정이름, 비밀번호)
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-			System.out.println("연결 성공");
+			conn = getConnection();
 			// 3. sql 준비
 			String sql = "select b.no, b.title, b.contents, b.hit, b.reg_date, b.g_no, b.o_no, b.depth, b.user_no, u.name "
-					+ "from board b " + "join user u " + "on b.user_no = u.no" + " order by g_no DESC, o_no ASC";
+					+ "from board b " + "join user u on b.user_no = u.no " + "where b.title like ? "
+					+ "order by g_no DESC, o_no ASC limit ?, ?";
 			pstmt = conn.prepareStatement(sql);
 
-			// 5. sql 실행
+			pstmt.setString(1, "%" + searchKeyword + "%");
+			pstmt.setInt(2, offset);
+			pstmt.setInt(3, itemsPerPage);
 
 			rs = pstmt.executeQuery();
 
@@ -48,11 +62,11 @@ public class BoardDao {
 				String userName = rs.getString(10);
 
 				BoardVo vo = new BoardVo();
-				vo.setBoardNo(no);
+				vo.setNo(no);
 				vo.setTitle(title);
 				vo.setContents(contents);
 				vo.setHit(hit);
-				vo.setDate(reg_day);
+				vo.setReg_date(reg_day);
 				vo.setG_no(g_no);
 				vo.setO_no(o_no);
 				vo.setDepth(depth);
@@ -62,8 +76,6 @@ public class BoardDao {
 				result.add(vo);
 
 			}
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		} finally {
@@ -85,18 +97,53 @@ public class BoardDao {
 		return result;
 	}
 
+	public int getTotalCountByKeyword(String searchKeyword) {
+		int totalCount = 0;
+
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			conn = getConnection();
+
+			String sql = "select count(*) from board b where b.title like ?";
+			pstmt = conn.prepareStatement(sql);
+
+			pstmt.setString(1, "%" + searchKeyword + "%");
+
+			rs = pstmt.executeQuery();
+
+			if (rs.next()) {
+				totalCount = rs.getInt(1);
+			}
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				// 7. 자원 처리
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return totalCount;
+	}
+
 	public BoardVo getBoardByNo(String no) {
 		BoardVo result = null;
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			// 1. JDBC Driver Class 로딩
-			Class.forName("org.mariadb.jdbc.Driver");
-
-			// 2. 연결하기
-			String url = "jdbc:mariadb://192.168.0.174:3307/webdb?chraset=utf8";
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			conn = getConnection();
 
 			// 3. sql 준비
 			String sql = "SELECT * FROM board WHERE no = ?";
@@ -109,19 +156,17 @@ public class BoardDao {
 			// 5. 결과처리
 			if (rs.next()) {
 				result = new BoardVo();
-				result.setBoardNo(rs.getInt("no"));
+				result.setNo(rs.getInt("no"));
 				result.setTitle(rs.getString("title"));
 				result.setContents(rs.getString("contents"));
 				result.setHit(rs.getInt("hit"));
-				result.setDate(rs.getString("reg_date"));
+				result.setReg_date(rs.getString("reg_date"));
 				result.setG_no(rs.getInt("g_no"));
 				result.setO_no(rs.getInt("o_no"));
 				result.setDepth(rs.getInt("depth"));
 				result.setUser_no(rs.getLong("user_no"));
 
 			}
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		} finally {
@@ -149,13 +194,7 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			// 1. JDBC Driver Class 로딩
-			Class.forName("org.mariadb.jdbc.Driver");
-			// 2. 연결하기
-			String url = "jdbc:mariadb://192.168.0.174:3307/webdb?chraset=utf8";
-			// getConnection (url, 계정이름, 비밀번호)
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-			System.out.println("연결 성공");
+			conn = getConnection();
 			// 3. sql 준비
 			String sql = "SELECT COALESCE(MAX(g_no), 0) + 1 AS nextGroupNo FROM board";
 			pstmt = conn.prepareStatement(sql);
@@ -165,8 +204,6 @@ public class BoardDao {
 			while (rs.next()) {
 				result = rs.getInt("nextGroupNo");
 			}
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		} finally {
@@ -194,12 +231,7 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			// 1. JDBC Driver Class 로딩
-			Class.forName("org.mariadb.jdbc.Driver");
-			// 2. 연결하기
-			String url = "jdbc:mariadb://192.168.0.174:3307/webdb?chraset=utf8";
-			// getConnection (url, 계정이름, 비밀번호)
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			conn = getConnection();
 			// 3. sql 준비
 			String sql = "SELECT MAX(o_no) + 1 AS nextOrderNo FROM board WHERE g_no = ?";
 			pstmt = conn.prepareStatement(sql);
@@ -210,8 +242,6 @@ public class BoardDao {
 			if (rs.next()) {
 				result = rs.getInt("nextOrderNo");
 			}
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		} finally {
@@ -233,11 +263,6 @@ public class BoardDao {
 		return result;
 	}
 
-	public int getNextDepth() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	public void insert(BoardVo vo) {
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -251,7 +276,7 @@ public class BoardDao {
 			pstmt.setString(1, vo.getTitle());
 			pstmt.setString(2, vo.getContents());
 			pstmt.setInt(3, 1);
-			pstmt.setString(4, vo.getDate());
+			pstmt.setString(4, vo.getReg_date());
 			pstmt.setInt(5, vo.getG_no());
 			pstmt.setInt(6, vo.getO_no());
 			pstmt.setInt(7, vo.getDepth());
@@ -276,22 +301,6 @@ public class BoardDao {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	private Connection getConnection() throws SQLException {
-		Connection conn = null;
-		// 1. JDBC Driver Class 로딩
-		try {
-			Class.forName("org.mariadb.jdbc.Driver");
-			// 2. 연결하기
-			String url = "jdbc:mariadb://192.168.0.174:3307/webdb?charset=utf8";
-			// getConnection (url, 계정이름, 비밀번호)
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
-			System.out.println("연결 성공");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-		return conn;
 	}
 
 	public void Update(int g_no, int o_no) {
@@ -333,12 +342,7 @@ public class BoardDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
-			// 1. JDBC Driver Class 로딩
-			Class.forName("org.mariadb.jdbc.Driver");
-			// 2. 연결하기
-			String url = "jdbc:mariadb://192.168.0.174:3307/webdb?chraset=utf8";
-			// getConnection (url, 계정이름, 비밀번호)
-			conn = DriverManager.getConnection(url, "webdb", "webdb");
+			conn = getConnection();
 			// 3. sql 준비
 			String sql = "update board " + " set title=?, contents=?, reg_date=current_time() " + " where no=?;";
 			pstmt = conn.prepareStatement(sql);
@@ -346,8 +350,6 @@ public class BoardDao {
 			pstmt.setString(2, contents);
 			pstmt.setInt(3, Integer.parseInt(no));
 			pstmt.executeUpdate();
-		} catch (ClassNotFoundException e) {
-			System.out.println("드라이버 로딩 실패:" + e);
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		} finally {
@@ -418,9 +420,7 @@ public class BoardDao {
 			// getConnection (url, 계정이름, 비밀번호)
 			conn = DriverManager.getConnection(url, "webdb", "webdb");
 			// 3. sql 준비
-			String sql = "update board "
-					+ " set hit = hit + 1 "
-					+ " where no=?";
+			String sql = "update board " + " set hit = hit + 1 " + " where no=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setInt(1, Integer.parseInt(no));
 			pstmt.executeUpdate();
