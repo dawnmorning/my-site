@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.poscodx.mysite.dao.BoardDao;
+import com.poscodx.mysite.repository.BoardDao;
 import com.poscodx.mysite.vo.BoardVo;
 import com.poscodx.mysite.vo.UserVo;
 import com.poscodx.web.mvc.Action;

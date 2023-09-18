@@ -3,155 +3,37 @@ package com.poscodx.mysite.repository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.poscodx.mysite.vo.UserVo;
 
 @Repository
 public class UserRepository {
-	public void insert(UserVo vo) {
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		try {
-			conn = getConnection();
-			// 3. sql 준비
-			String sql = "insert into user values (null,?,?,password(?),?, current_date())";
-			pstmt = conn.prepareStatement(sql);
+	@Autowired
+	private SqlSession sqlSession;
 
-			// 4. binding
-			pstmt.setString(1, vo.getName());
-			pstmt.setString(2, vo.getEmail());
-			pstmt.setString(3, vo.getPassword());
-			pstmt.setString(4, vo.getGender());
-
-			// 5. sql 실행
-			pstmt.executeQuery();
-
-			// 6. 결과처리 생략
-
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+	public Boolean insert(UserVo vo) {
+		int count = sqlSession.insert("user.insert", vo);
+		return count == 1;
 	}
 
 	public UserVo findByEamilAndPassword(String email, String password) {
-		UserVo userVo = null;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = getConnection();
-			// 3. sql 준비
-			String sql = "select no, name" 
-					+ " from user" 
-					+ " where email = ? and password=password(?)";
-			pstmt = conn.prepareStatement(sql);
-
-			// 4. binding
-			pstmt.setString(1, email);
-			pstmt.setString(2, password);
-
-			// 5. sql 실행
-			rs = pstmt.executeQuery();
-
-			// 6. 결과처리
-			if(rs.next()) {
-				Long no = rs.getLong(1);
-				String name = rs.getString(2);
-				
-				userVo = new UserVo();
-				userVo.setNo(no);
-				userVo.setName(name);
-			}
-
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-			
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return userVo;
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("email", email);
+		map.put("password", password);
+		return sqlSession.selectOne("user.findByEamilAndPassword", map);
 	}
+
 	public UserVo GetUserByNo(Long no) {
-		UserVo userVo = null;
-		Connection conn = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		try {
-			conn = getConnection();
-			// 3. sql 준비
-			String sql = "select *" 
-					+ " from user" 
-					+ " where no=?";
-			pstmt = conn.prepareStatement(sql);
-
-			// 4. binding
-			pstmt.setLong(1, no);
-
-			// 5. sql 실행
-			rs = pstmt.executeQuery();
-
-			// 6. 결과처리
-			if(rs.next()) {
-				Long userNo = rs.getLong(1);
-				String name = rs.getString(2);
-				String email = rs.getString(3);
-				String password = rs.getString(4);
-				String gender = rs.getString(5);				
-				userVo = new UserVo();
-				userVo.setNo(userNo);
-				userVo.setName(name);
-				userVo.setEmail(email);
-				userVo.setPassword(password);
-				userVo.setGender(gender);
-			}
-
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		} finally {
-			try {
-				if(rs != null) {
-					rs.close();
-				}
-			
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (conn != null) {
-					conn.close();
-				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return userVo;
+		return sqlSession.selectOne("user.GetUserByNo", no);
 	}
+
 	private Connection getConnection() throws SQLException {
 		Connection conn = null;
 		// 1. JDBC Driver Class 로딩
@@ -170,36 +52,36 @@ public class UserRepository {
 
 	public void update(UserVo userVo) {
 		Connection conn = null;
-	    PreparedStatement pstmt = null;
-	    try {
-	        conn = getConnection();
+		PreparedStatement pstmt = null;
+		try {
+			conn = getConnection();
 
-	        // sql preparation
-	        String sql = "update user set name=?, password=password(?), gender=? where no=?";
-	        pstmt = conn.prepareStatement(sql);
+			// sql preparation
+			String sql = "update user set name=?, password=password(?), gender=? where no=?";
+			pstmt = conn.prepareStatement(sql);
 
-	        // binding
-	        pstmt.setString(1, userVo.getName());
-	        pstmt.setString(2, userVo.getPassword());
-	        pstmt.setString(3, userVo.getGender());
-	        pstmt.setLong(4, userVo.getNo());
+			// binding
+			pstmt.setString(1, userVo.getName());
+			pstmt.setString(2, userVo.getPassword());
+			pstmt.setString(3, userVo.getGender());
+			pstmt.setLong(4, userVo.getNo());
 
-	        // sql execution
-	        pstmt.executeUpdate();
+			// sql execution
+			pstmt.executeUpdate();
 
-	    } catch (SQLException e) {
-	        System.out.println("error:" + e);
-	    } finally {
-	        try {
-	            if (pstmt != null) {
-	                pstmt.close();
-	            }
-	            if (conn != null) {
-	                conn.close();
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
