@@ -14,4 +14,8 @@ public class UserService {
 	public void addUser(UserVo vo) {
 		userRepository.insert(vo);
 	}
+
+	public UserVo getUser(String email, String password) {
+		return userRepository.findByEamilAndPassword(email, password);
+	}
 }
