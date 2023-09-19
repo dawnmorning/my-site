@@ -1,18 +1,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-	<%
-	pageContext.setAttribute("newline", "\n");
-	%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%> 
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<% pageContext.setAttribute( "newLine", "\n" ); %>
 <!DOCTYPE html>
 <html>
 <head>
 <title>mysite</title>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<link href="${pageContext.request.contextPath }/assets/css/board.css"
-	rel="stylesheet" type="text/css">
+<meta http-equiv="contents-type" content="text/html; charset=utf-8">
+<link href="${pageContext.request.contextPath }/assets/css/board.css" rel="stylesheet" type="text/css">
 </head>
 <body>
 	<div id="container">
@@ -25,28 +21,25 @@
 					</tr>
 					<tr>
 						<td class="label">제목</td>
-						<td>${board.title }</td>
+						<td>${boardVo.title }</td>
 					</tr>
 					<tr>
 						<td class="label">내용</td>
 						<td>
-							<div class="view-content">${fn:replace(board.contents, newline, "<br>") }</div>
+							<div class="view-content">
+							${fn:replace(boardVo.contents, newLine, "<br>") }					
+							</div>
 						</td>
 					</tr>
 				</table>
 				<div class="bottom">
-					<c:choose>
-						<c:when test="${board.user_no == authUser.no }">
-							<a href="${pageContext.request.contextPath }/board?b=modifyform&no=${board.boardNo}">글수정</a>
-							<a href="${pageContext.request.contextPath }/board?b=writeform&no=${board.boardNo}">답글	달기</a>
-							<a href="${pageContext.request.contextPath }/board">글목록</a> 
-						</c:when>
-						<c:otherwise>
-							<a href="${pageContext.request.contextPath }/board?b=writeform&no=${board.boardNo}">답글	달기</a>
-							<a href="${pageContext.request.contextPath }/board">글목록</a> 
-						</c:otherwise>
-					</c:choose>
-					
+					<a href="${pageContext.request.contextPath }/board?p=${param.p }&kwd=${param.kwd }">글목록</a>
+					<c:if test="${ not empty authUser }">
+						<a href="${pageContext.request.contextPath }/board/reply/${boardVo.no }?p=${param.p }&kwd=${param.kwd }">답글 달기</a>
+						<c:if test="${authUser.no == boardVo.user_no }">
+							<a href="${pageContext.request.contextPath }/board/modify/${boardVo.no }?p=${param.p }&kwd=${param.kwd }">글수정</a>
+						</c:if>
+					</c:if>
 				</div>
 			</div>
 		</div>

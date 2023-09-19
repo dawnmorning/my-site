@@ -6,7 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.poscodx.mysite.repository.BoardDao;
+import com.poscodx.mysite.dao.BoardDao;
 import com.poscodx.web.mvc.Action;
 
 public class ModifyAction implements Action {
