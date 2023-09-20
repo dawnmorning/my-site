@@ -26,15 +26,7 @@ public class AdminController {
 	}
 
 	@RequestMapping("/main/update")
-	public String mainUpdate(@RequestParam(value = "title", required = true, defaultValue = "") String title,
-			@RequestParam(value = "welcome", required = true, defaultValue = "") String welcome,
-			@RequestParam(value = "description", required = true, defaultValue = "") String description) {
-
-		SiteVo vo = new SiteVo();
-		vo.setTitle(title);
-		vo.setWelcome(welcome);
-		vo.setDescription(description);
-
+	public String mainUpdate(SiteVo vo) {
 		siteService.UpdateSite(vo);
 		return "admin/main";
 	}
