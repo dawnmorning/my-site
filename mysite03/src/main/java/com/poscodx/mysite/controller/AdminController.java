@@ -7,13 +7,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.poscodx.mysite.service.SiteService;
 
 @Controller
-public class MainController {
-	// 가져와서 뿌려야함
+@RequestMapping("/admin")
+public class AdminController {
 	@Autowired
 	private SiteService siteService;
-	
-	@RequestMapping("/")
+
+	@RequestMapping("")
 	public String main() {
-		return "/main/index";
+		return "admin/main";
+	}
+
+	@RequestMapping("/guestbook")
+	public String guestbook() {
+		return "admin/guestbook";
+	}
+
+	@RequestMapping("/board")
+	public String board() {
+		return "admin/board";
+	}
+
+	@RequestMapping("/user")
+	public String user() {
+		return "admin/user";
 	}
 }

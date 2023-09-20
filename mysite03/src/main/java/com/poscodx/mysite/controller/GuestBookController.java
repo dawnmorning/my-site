@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.poscodx.mysite.security.Auth;
 import com.poscodx.mysite.service.GuestBookService;
 import com.poscodx.mysite.vo.GuestBookVo;
 
@@ -21,6 +22,8 @@ public class GuestBookController {
 	@Autowired
 	private GuestBookService guestBookService;
 	
+//	@Auth(Role = "USER")
+//	@Auth
 	@RequestMapping("")
 	public String main(Model model) {
 		// 넣어서 보내줘야지
