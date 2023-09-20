@@ -5,6 +5,7 @@
 		update site set title=#{title}, welcome=#{welcome},description=#{description} 
 	</update>
 	<select id="getSite" resultType="sitevo">
-		select title, welcome, description from site
+		select title, welcome, description from site order by no asc
+		   limit 0, 1
 	</select>
 </mapper>
