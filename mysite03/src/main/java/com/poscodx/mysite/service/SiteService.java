@@ -12,10 +12,10 @@ public class SiteService {
 	private SiteRepository siteRepository;
 	
 	public SiteVo getSite() {
-		return null;
+		return siteRepository.getSite();
 	}
 	public void UpdateSite(SiteVo vo) {
-		
+		siteRepository.update(vo);
 	}
 	
 }
