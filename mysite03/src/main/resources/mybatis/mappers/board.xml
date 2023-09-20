@@ -36,7 +36,7 @@
 		</choose>
 	</insert>
 
-	<update id="update" parameterType="boardVo">
+	<update id="update" parameterType="boardvo">
 		<![CDATA[
 		update board 
 		   set title=#{title },
