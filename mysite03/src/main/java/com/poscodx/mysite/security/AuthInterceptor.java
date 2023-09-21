@@ -24,14 +24,20 @@ public class AuthInterceptor implements HandlerInterceptor {
 		HandlerMethod handlerMethod = (HandlerMethod) handler;
 		
 		// 3. Handler Method의 @Auth 가져오기
+		// 개별 컨트롤러
 		Auth auth = handlerMethod.getMethodAnnotation(Auth.class);
+//		이 코드는 현재 처리 중인 HandlerMethod에서 @Auth 어노테이션을 가져오는 부분입니다. 
+//		즉, 해당 요청을 처리할 메서드에 @Auth 어노테이션이 붙어 있는지 확인하는 것입니다.
+//		예를 들면, 컨트롤러의 개별 메서드 위에 @Auth를 붙였을 경우 해당 메서드에 적용된 @Auth 정보를 가져오게 됩니다.
 		// 과제. HandlerMethod의 @Auth가 없는 경우 Type(Class)의 @Auth 가져오기 메서드가 있음
 		if (auth == null) {
 		    auth = handlerMethod.getBeanType().getAnnotation(Auth.class);
+//			handlerMethod.getBeanType()는 현재 처리 중인 메서드가 속한 클래스의 정보를 가져옵니다.
+//			getAnnotation(Auth.class)는 해당 클래스에 @Auth 어노테이션이 붙어 있는지 확인하고, 있으면 해당 어노테이션 정보를 반환합니다.
+//			예를 들면, 전체 컨트롤러 클래스 위에 @Auth를 붙였을 경우 해당 클래스에 적용된 @Auth 정보를 가져오게 됩니다.
 		}
 		
 		// 4. @Auth 가 없는 경우
-
 		if (auth == null) {
 			return true;
 		}
@@ -53,8 +59,6 @@ public class AuthInterceptor implements HandlerInterceptor {
 			response.sendRedirect(request.getContextPath());
 		    return false;
 		}
-		
-		
 		// 6. 인증 확인
 		return true;
 	}
