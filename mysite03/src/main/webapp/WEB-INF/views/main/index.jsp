@@ -21,7 +21,7 @@
 			<div id="content">
 				<div id="site-introduction">
 					<img id="profile"
-						src="${pageContext.request.contextPath }/assets/images/곽철이배경화면.png">
+						src="${pageContext.request.contextPath }/${siteVo.profile}">
 					<h2>${siteVo.welcome }</h2>
 					<p id="title">
 						${siteVo.description }<br> <br> <a

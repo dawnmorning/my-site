@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.poscodx.mysite.security.Auth;
+import com.poscodx.mysite.service.FileUploadService;
 import com.poscodx.mysite.service.SiteService;
 import com.poscodx.mysite.vo.SiteVo;
 
@@ -16,6 +19,8 @@ import com.poscodx.mysite.vo.SiteVo;
 public class AdminController {
 	@Autowired
 	private SiteService siteService;
+	@Autowired
+	private FileUploadService fileUploadService;
 
 	@RequestMapping("")
 	public String main(Model model) {
@@ -25,10 +30,14 @@ public class AdminController {
 	}
 
 	@RequestMapping("/main/update")
-	public String mainUpdate(SiteVo vo) {
+	public String mainUpdate(SiteVo vo, @RequestParam("profileImage") MultipartFile profileImage) {
+		if (!profileImage.isEmpty()) {
+	        String imageUrl = fileUploadService.restore(profileImage);
+	        vo.setProfile(imageUrl);
+	    }
 		siteService.UpdateSite(vo);
 		System.out.println(vo);
-		return "admin/main";
+		return "redirect:/admin";
 	}
 
 	@RequestMapping("/guestbook")
