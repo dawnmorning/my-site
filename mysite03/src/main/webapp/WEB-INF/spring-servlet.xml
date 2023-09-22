@@ -12,12 +12,13 @@
 	<!-- auto proxy -->
 	<aop:aspectj-autoproxy />
 	<context:annotation-config />
-	
+
 	<!-- validator, conversionService, messageConverter를 자동으로 등록 -->
-	<mvc:annotation-driven >
-	<!-- Argument Resolvers -->
+	<mvc:annotation-driven>
+		<!-- Argument Resolvers -->
 		<mvc:argument-resolvers>
-			<bean class ="com.poscodx.mysite.security.AuthUserHandlerMethodAuthUserArgumentResolver"/>
+			<bean
+				class="com.poscodx.mysite.security.AuthUserHandlerMethodAuthUserArgumentResolver" />
 		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
 
@@ -26,7 +27,7 @@
 	<context:annotation-config />
 	<context:component-scan
 		base-package="com.poscodx.mysite.controller, com.poscodx.mysite.exception" />
-		
+
 	<!-- interceptors -->
 	<mvc:interceptors>
 		<mvc:interceptor>
@@ -39,9 +40,9 @@
 		</mvc:interceptor>
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
-			<mvc:exclude-mapping path="/assets/**"/>
-			<mvc:exclude-mapping path="/user/auth"/>
-			<mvc:exclude-mapping path="/user/logout"/>
+			<mvc:exclude-mapping path="/assets/**" />
+			<mvc:exclude-mapping path="/user/auth" />
+			<mvc:exclude-mapping path="/user/logout" />
 			<bean class="com.poscodx.mysite.security.AuthInterceptor" />
 		</mvc:interceptor>
 	</mvc:interceptors>
@@ -69,5 +70,16 @@
 	<!-- url-resource-mapping -->
 	<mvc:resources mapping="/images/**"
 		location="file:/mysite-uploads/" />
+	<!-- MessageSource -->
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>messages/messages_ko</value>
+				<value>messages/messages_두</value>
+			</list>
+		</property>
+	</bean>
+
 
 </beans>

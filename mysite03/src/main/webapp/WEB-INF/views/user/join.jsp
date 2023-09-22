@@ -1,7 +1,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -19,45 +20,51 @@
 		<div id="content">
 			<div id="user">
 
-				<form id="join-form" name="joinForm" method="post"
+				<form:form 
+				modelAttribute="userVo"
+				id="join-form" name="joinForm" method="post"
 					action="${pageContext.request.contextPath }/user/join">
-					<label class="block-label" for="name">이름</label> 
-					<input id="name" name="name" type="text" value="${userVo.name}"> 
-					<div style="color:red; padding:3px 0 5px 0;">
-						<spring:hasBindErrors name = "userVo">
+					<label class="block-label" for="name">이름</label>
+					<form:input path="name"/>
+					<!-- 
+					<input id="name" name="name" type="text" value="${userVo.name}">					
+					 -->
+					<div style="color: red; padding: 3px 0 5px 0;">
+						<spring:hasBindErrors name="userVo">
 							<c:if test="${errors.hasFieldErrors('name')}">
-								${errors.getFieldError("name").defaultMessage}
+								<!-- ${errors.getFieldError("name").defaultMessage}  -->
+								<spring:message code='${errors.getFieldError("name").codes[0] }' />
+								<!-- NotEmpty.userVo.name에 값이 있어야 함 -->
 							</c:if>
 						</spring:hasBindErrors>
-					</div>					
-					<label class="block-label" for="email">이메일</label> 
-					<input id="email" name="email" type="text" value=""> 
-					<input type="button" value="id 중복체크"> 
-						<div style="color:red; padding:3px 0 5px 0;">
-							<spring:hasBindErrors name = "userVo">
-								<c:if test="${errors.hasFieldErrors('email')}">
+					</div>
+					<label class="block-label" for="email">이메일</label>
+					<input id="email" name="email" type="text" value="">
+					<input type="button" value="id 중복체크">
+					<div style="color: red; padding: 3px 0 5px 0;">
+						<spring:hasBindErrors name="userVo">
+							<c:if test="${errors.hasFieldErrors('email')}">
 									${errors.getFieldError("email").defaultMessage}
 								</c:if>
-							</spring:hasBindErrors>
-						</div>	
-					
-					<label class="block-label">패스워드</label> 
+						</spring:hasBindErrors>
+					</div>
+
+					<label class="block-label"><spring:message
+							code="user.join.label.password" /></label>
 					<input name="password" type="password" value="">
-						<div style="color:red; padding:3px 0 5px 0;">
-							<spring:hasBindErrors name = "userVo">
-								<c:if test="${errors.hasFieldErrors('email')}">
+					<div style="color: red; padding: 3px 0 5px 0;">
+						<spring:hasBindErrors name="userVo">
+							<c:if test="${errors.hasFieldErrors('email')}">
 									${errors.getFieldError("email").defaultMessage}
 								</c:if>
-							</spring:hasBindErrors>
-						</div>	
+						</spring:hasBindErrors>
+					</div>
 
 					<fieldset>
 						<legend>성별</legend>
-						<label>여</label> 
-						<input type="radio" name="gender" value="female"
-							checked="checked"> 
-						<label>남</label> 
-						<input type="radio" name="gender" value="male">
+						<label>여</label> <input type="radio" name="gender" value="female"
+							checked="checked"> <label>남</label> <input type="radio"
+							name="gender" value="male">
 					</fieldset>
 
 					<fieldset>
@@ -67,7 +74,7 @@
 					</fieldset>
 
 					<input type="submit" value="가입하기">
-				</form>
+				</form:form>
 			</div>
 		</div>
 		<c:import url="/WEB-INF/views/includes/navigation.jsp" />
