@@ -12,19 +12,23 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.poscodx.mysite.vo.UserVo;
 
-public class AuthUserHandlerMethodAuthUserArgumentResolver implements HandlerMethodArgumentResolver {
-
+public class AuthUserHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 	@Override
-	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-			NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+	public Object resolveArgument(
+		MethodParameter parameter,
+		ModelAndViewContainer mavContainer,
+		NativeWebRequest webRequest,
+		WebDataBinderFactory binderFactory) throws Exception {
+		
 		if(!supportsParameter(parameter)) {
 			return WebArgumentResolver.UNRESOLVED;
 		}
-   		HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
-   		HttpSession session = request.getSession();
+		
+		HttpServletRequest request = (HttpServletRequest)webRequest.getNativeRequest();
+		HttpSession session = request.getSession();
 		return session.getAttribute("authUser");
 	}
-	
+
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
 		AuthUser authUser = parameter.getParameterAnnotation(AuthUser.class);
@@ -33,12 +37,13 @@ public class AuthUserHandlerMethodAuthUserArgumentResolver implements HandlerMet
 		if(authUser == null) {
 			return false;
 		}
-		// Parameter Type이 UserVo가 아닐 때 
-		if(!parameter.getParameterType().equals(UserVo.class)){
+		
+		// Parameter Type이 UserVo가 아니면,
+		if(!parameter.getParameterType().equals(UserVo.class)) {
 			return false;
 		}
 		
 		return true;
 	}
-
+	
 }

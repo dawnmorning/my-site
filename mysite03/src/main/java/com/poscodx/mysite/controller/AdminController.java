@@ -1,5 +1,7 @@
 package com.poscodx.mysite.controller;
 
+import javax.servlet.ServletContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +20,8 @@ import com.poscodx.mysite.vo.SiteVo;
 @RequestMapping("/admin")
 public class AdminController {
 	@Autowired
+	private ServletContext servletContext;
+	@Autowired
 	private SiteService siteService;
 	@Autowired
 	private FileUploadService fileUploadService;
@@ -25,7 +29,8 @@ public class AdminController {
 	@RequestMapping("")
 	public String main(Model model) {
 		SiteVo siteVo = siteService.getSite();
-		model.addAttribute("siteVo", siteVo);
+		servletContext.setAttribute("siteVo", siteVo);
+		System.out.println("---->" + servletContext);
 		return "admin/main";
 	}
 
@@ -34,6 +39,9 @@ public class AdminController {
 		if (!profileImage.isEmpty()) {
 	        String imageUrl = fileUploadService.restore(profileImage);
 	        vo.setProfile(imageUrl);
+	    } else {
+	    	SiteVo currentSiteVo = siteService.getSite();
+	        vo.setProfile(currentSiteVo.getProfile());
 	    }
 		siteService.UpdateSite(vo);
 		System.out.println(vo);
