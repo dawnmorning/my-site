@@ -45,6 +45,10 @@
 			<mvc:exclude-mapping path="/user/logout" />
 			<bean class="com.poscodx.mysite.security.AuthInterceptor" />
 		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean class="com.poscodx.mysite.interceptor.SiteInterceptor" />
+		</mvc:interceptor>
 	</mvc:interceptors>
 	<!-- ViewResolver 설정 -->
 	<bean id="viewResolver"
@@ -86,6 +90,7 @@
 			</list>
 		</property>
 	</bean>
-
+	<!-- ApplicationContextEventListener -->
+	<bean class="com.poscodx.mysite.event.ApplicationContextEventListener"/>
 
 </beans>
