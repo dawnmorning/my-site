@@ -14,7 +14,7 @@ import org.springframework.core.env.Environment;
 public class DBConfig {
 	@Autowired
 	private Environment env;
-
+	
 	@Bean
 	public DataSource dataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
@@ -24,7 +24,7 @@ public class DBConfig {
 		dataSource.setPassword(env.getProperty("jdbc.password"));
 		dataSource.setInitialSize(env.getProperty("jdbc.initialSize", Integer.class));
 		dataSource.setMaxActive(env.getProperty("jdbc.maxActive", Integer.class));
-
+		
 		return dataSource;
 	}
 }
