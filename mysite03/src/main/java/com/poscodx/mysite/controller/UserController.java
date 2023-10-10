@@ -57,7 +57,7 @@ public class UserController {
 	public String login() {
 		return "user/login";
 	}
-
+	
 //	@RequestMapping(value = "/login", method = RequestMethod.POST)
 //	public String auth(HttpSession session,
 //			@RequestParam(value = "email", required = true, defaultValue = "") String email,
