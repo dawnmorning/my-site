@@ -6,44 +6,56 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Calendar;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.poscodx.mysite.exception.FileUploadSeviceException;
+import com.poscodx.mysite.exception.FileUploadServiceException;
+
 
 @Service
 public class FileUploadService {
+	@Autowired
+	private org.springframework.core.env.Environment env;
+	
 	private static String SAVE_PATH = "/mysite-uploads";
-	private static String URL_PATH = "/assets/images";
+	private static String URL_PATH = "/assets/upload-images";
 	public String restore(MultipartFile file) {
 		String url = null;
+		
 		try {
-			File uploadDirectory = new File(SAVE_PATH);
-			if (!uploadDirectory.exists()) {
+			File uploadDirectory = new File(env.getProperty("fileupload.uploadLocation"));
+			if(!uploadDirectory.exists()) {
 				uploadDirectory.mkdirs();
 			}
+			
 			if(file.isEmpty()) {
 				return url;
 			}
+			
 			String originFilename = file.getOriginalFilename();
-			String extName = originFilename.substring(originFilename.lastIndexOf(".") + 1) ;
+			String extName = originFilename.substring(originFilename.lastIndexOf(".") + 1);
 			String saveFilename = generateSaveFilename(extName);
 			Long fileSize = file.getSize();
-			System.out.println(originFilename);
+			
+			System.out.println("########" + originFilename);
+			System.out.println("########" + saveFilename);
 			System.out.println("########" + fileSize);
-			System.out.println(saveFilename);
 			
 			byte[] data = file.getBytes();
-			OutputStream os =  new FileOutputStream(SAVE_PATH + "/" + saveFilename);
+			OutputStream os = new FileOutputStream(env.getProperty("fileupload.resourceUrl") + "/" + saveFilename);
 			os.write(data);
 			os.close();
 			
-			url= URL_PATH + "/" + saveFilename;
-		} catch (IOException ex) {
-			throw new FileUploadSeviceException(ex.toString());
+			url = env.getProperty("fileupload.uploadLocation") + "/" + saveFilename;
+			
+		} catch(IOException ex) {
+			throw new FileUploadServiceException(ex.toString());
 		}
+		
 		return url;
 	}
+
 	private String generateSaveFilename(String extName) {
 		String filename = "";
 		

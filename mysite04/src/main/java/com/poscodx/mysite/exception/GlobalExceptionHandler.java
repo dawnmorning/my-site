@@ -14,16 +14,14 @@ public class GlobalExceptionHandler {
 	private static final Log logger = LogFactory.getLog(GlobalExceptionHandler.class);
 	
 	@ExceptionHandler(Exception.class)
-	public String handlerException(Exception e, Model model) {
-		// 1. 로깅(Logging)
-//		System.out.println(e);
-		StringWriter error = new StringWriter();
-		e.printStackTrace(new PrintWriter(error));
-		System.out.println(error.toString());
-		logger.error(error.toString());
+	public String handlerException(Model model, Exception e) {
+		//1. 로깅(Logging)
+		StringWriter errors = new StringWriter();
+		e.printStackTrace(new PrintWriter(errors));
+		logger.error(errors.toString());
 		
-		// 2. 사과 페이지
-		model.addAttribute("error", error);
+		//2. 사과 페이지
+		model.addAttribute("errors", errors.toString());
 		return "error/exception";
 	}
 }
