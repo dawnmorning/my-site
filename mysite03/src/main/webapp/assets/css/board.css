@@ -44,9 +44,11 @@ input#kwd	{
 	padding:8px;
 	text-align:center; 	 
 }
-.tbl-ex td:nth-child(2){
-	text-align:left;
+
+.tbl-ex td:nth-child(2) {
+	text-align: left;
 }
+	
 .tbl-ex th	{ 
 	border-top:2px solid #333;
 	border-bottom:2px solid #333; 
@@ -130,7 +132,7 @@ a.del	{
 	display:block;
 	width:20px;
 	height:20px; 
-	background:url("/mysite03/assets/images/recycle.png") no-repeat 0 0;
+	background:url("/mysite02/assets/images/recycle.png") no-repeat 0 0;
 	font-size:0;
 }
 

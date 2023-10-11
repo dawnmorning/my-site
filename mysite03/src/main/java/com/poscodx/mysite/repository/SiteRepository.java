@@ -10,15 +10,12 @@ import com.poscodx.mysite.vo.SiteVo;
 public class SiteRepository {
 	@Autowired
 	private SqlSession sqlSession;
-	
-	public void update(SiteVo siteVo) {
-		sqlSession.update("admin.update", siteVo);
+
+	public SiteVo find() {
+		return sqlSession.selectOne("site.find");
 	}
 
-	public SiteVo getSite() {
-		return sqlSession.selectOne("admin.getSite");
+	public void update(SiteVo vo) {
+		sqlSession.update("site.update", vo);
 	}
-	
-
-	
 }

@@ -1,6 +1,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>  
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -8,8 +8,10 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
-<body>	
+<body>
 	<h1>Exception Thrown</h1>
-	<pre>${error }</pre>
+	<pre style="color: red">
+	${errors }	
+	</pre>
 </body>
 </html>

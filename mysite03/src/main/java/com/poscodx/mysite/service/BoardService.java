@@ -19,8 +19,8 @@ public class BoardService {
 	private BoardRepository boardRepository;
 	
 	public void addContents(BoardVo boardVo) {
-		if(boardVo.getG_no() != null) {
-			boardRepository.updateOrderNo(boardVo.getG_no(), boardVo.getO_no());
+		if(boardVo.getGroupNo() != null) {
+			boardRepository.updateOrderNo(boardVo.getGroupNo(), boardVo.getOrderNo());
 		}
 		
 		boardRepository.insert(boardVo);
@@ -76,10 +76,10 @@ public class BoardService {
 		
 		//4. 리스트 가져오기
 		List<BoardVo> list = boardRepository.findAllByPageAndKeword(keyword, currentPage, LIST_SIZE);
-
+		
 		//5. 리스트 정보를 맵에 저장
 		Map<String, Object> map = new HashMap<String, Object>();
-		System.out.println(list);
+		
 		map.put("list", list);
 		map.put("totalCount", totalCount);
 		map.put("listSize", LIST_SIZE);
@@ -89,7 +89,7 @@ public class BoardService {
 		map.put("prevPage", prevPage);
 		map.put("nextPage", nextPage);
 		map.put("keyword", keyword);
-		
+
 		return map;
 	}
 }
