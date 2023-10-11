@@ -6,24 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.poscodx.mysite.repository.GuestBookRepository;
+
 import com.poscodx.mysite.vo.GuestBookVo;
 
 @Service
 public class GuestBookService {
-
-	// 서비스가 레포지토리 사용
 	@Autowired
-	private GuestBookRepository guestBookRepository;
+	private GuestBookRepository guestbookRepository;
 
 	public List<GuestBookVo> getContentsList() {
-		return guestBookRepository.guestBookfindAll();
+		return guestbookRepository.findAll();
 	}
 
-	public void deleteContents(int no, String password) {
-		guestBookRepository.guestBookDeleteByPassWord(no, password);
+	public Boolean deleteContents(Long no, String password) {
+		return guestbookRepository.deleteByNoAndPassword(no, password);
 	}
 
-	public void insertContents(GuestBookVo vo) {
-		guestBookRepository.guestBookInsert(vo);
+	public Boolean addContents(GuestBookVo vo) {
+		return guestbookRepository.insert(vo);
 	}
 }

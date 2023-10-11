@@ -12,18 +12,16 @@ import com.poscodx.mysite.vo.SiteVo;
 public class SiteInterceptor implements HandlerInterceptor {
 	@Autowired
 	private SiteService siteService;
-
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-//		System.out.println("SiteIntercpetor() called()");
-		SiteVo siteVo = (SiteVo) request.getServletContext().getAttribute("siteVo");
-		if (siteVo == null) {
+		SiteVo siteVo = (SiteVo)request.getServletContext().getAttribute("siteVo");
+		if(siteVo == null) {
 			siteVo = siteService.getSite();
 			request.getServletContext().setAttribute("siteVo", siteVo);
-			System.out.println(siteVo);
 		}
-		return true ;
+		
+		return true;
 	}
- 
 }
