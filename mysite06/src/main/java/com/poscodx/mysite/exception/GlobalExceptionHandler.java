@@ -16,17 +16,18 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
 	public String handlerException(Model model, Exception e) {
-		// 1. 404 Error 처리
-		if (e instanceof NoHandlerFoundException) {
+	
+		//1. 404 Error 처리
+		if(e instanceof NoHandlerFoundException) {
 			return "error/404";
 		}
 		
-		//1. 로깅(Logging)
+		//2. 로깅(Logging)
 		StringWriter errors = new StringWriter();
 		e.printStackTrace(new PrintWriter(errors));
 		logger.error(errors.toString());
 		
-		//2. 사과 페이지
+		//3. 사과 페이지
 		model.addAttribute("errors", errors.toString());
 		return "error/exception";
 	}
