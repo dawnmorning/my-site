@@ -28,7 +28,7 @@ spring:
 
    # message resources(internationalization, i18n)
    messages:
-      always-message-format: true
+      always-use-message-format: true
       basename: web/messages/messages_ko      
       encoding: utf-8
    
@@ -40,7 +40,7 @@ spring:
    #datasource
    datasource:
       driver-class-name: org.mariadb.jdbc.Driver
-      url: jdbc:mariadb://192.168.0.174:3307/webdb?charset=utf8
+      url: jdbc:mariadb://192.168.0.143:3307/webdb?charset=utf8
       username: webdb
       password: webdb
       hikari:
