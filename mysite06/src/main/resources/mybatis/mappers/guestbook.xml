@@ -5,9 +5,9 @@
 	
 	<select id="findAll" resultType="guestbookVo">
 		<![CDATA[
-		  select no, name, contents, date_format(reg_date, '%Y/%m/%d %H:%i:%s') as regDate 
+		  select no, name, contents, date_format(reg_day, '%Y/%m/%d %H:%i:%s') as reg_day
 		    from guestbook 
-        order by reg_date desc
+        order by reg_day desc
 		]]>
 	</select>
 

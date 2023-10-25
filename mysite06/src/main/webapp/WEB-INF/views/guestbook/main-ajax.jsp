@@ -11,6 +11,86 @@
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script type="text/javascript">
+function renderGuestbookEntry(entry, prepend = false) {
+    var guestbookList = $('#list-guestbook');
+
+    // 게스트북 항목을 위한 HTML 구조 생성
+    var listItem = $("<li data-no='" + entry.no + "'></li>");
+    listItem.append("<strong>" + entry.name + "</strong>");
+    listItem.append(
+        "<p>" + entry.contents + "<br>" +
+        "비번:" + entry.password + " <em>" + entry.regDate + "</em></p>"
+    );
+
+    // 삭제 링크 추가 (이벤트 핸들러를 연결해야 함)
+    var deleteLink = $("<a href='#' data-no='" + entry.no + "'>삭제</a>");
+    listItem.append(deleteLink);
+
+    // prepend 매개변수가 true로 설정된 경우 항목을 목록의 시작 부분에 추가
+    if (prepend) {
+        guestbookList.prepend(listItem);
+    } else {
+        guestbookList.append(listItem);
+    }
+
+    // 삭제 링크에 클릭 이벤트 핸들러 바인딩
+    // (이 부분은 '삭제' 기능의 구현에 따라 추가적인 로직이 필요할 수 있습니다)
+    deleteLink.click(function(e) {
+        e.preventDefault();
+        // 여기에 삭제 로직을 구현하세요.
+        // 예: ajax 요청을 사용한 게스트북 항목 삭제
+    });
+}
+function loadGuestbookEntries() {
+    $.ajax({
+        type: "get",
+        url: "${pageContext.request.contextPath}/api/gb", // 이 URL 경로는 서버 설정에 따라 달라질 수 있습니다.
+        dataType: "json",
+        success: function(response) {
+            // 서버에서 반환된 데이터를 확인합니다.
+            console.log(response);
+
+            // 가져온 엔트리들을 렌더링합니다.
+            $.each(response.data, function(i, entry) {
+                // 'false'는 항목을 목록의 끝에 추가하라는 의미입니다. 
+                // 만약 새 항목을 목록의 시작 부분에 추가하고 싶다면 'true'를 전달하세요.
+                renderGuestbookEntry(entry, false);
+            });
+        },
+        error: function(e) {
+            // 오류 발생 시 콘솔에 오류 로그 출력
+            console.error("ERROR: ", e);
+        }
+    });
+}
+	$(document).ready(function(){
+		loadGuestbookEntries();
+		$('#add-form').submit(function(e){
+			e.preventDefault()
+			
+			var formData = {
+				name: $('#input-name').val(),
+				password: $('#input-password').val(),
+				contents: $('#tx-content').val()
+			}
+			$.ajax({
+				type:"post",
+				contentType: "application/json",
+				url: "${pageContext.request.contextPath}/api/gb",
+				data: JSON.stringify(formData),
+				dataType: 'json',
+				success : function(res){
+					console.log(res)
+				},
+				error:function(e){
+					console.log(formData)
+					console.error("ERROR: ", e)
+				}
+			})
+		})
+	})
+</script>
 </head>
 <body>
 	<div id="container">
@@ -34,29 +114,7 @@
 						</p>
 						<strong></strong>
 						<a href='' data-no=''>삭제</a> 
-					</li>
-					
-					<li data-no=''>
-						<strong>둘리</strong>
-						<p>
-							안녕하세요<br>
-							홈페이지가 개 굿 입니다.
-						</p>
-						<strong></strong>
-						<a href='' data-no=''>삭제</a> 
-					</li>
-
-					<li data-no=''>
-						<strong>주인</strong>
-						<p>
-							아작스 방명록 입니다.<br>
-							테스트~
-						</p>
-						<strong></strong>
-						<a href='' data-no=''>삭제</a> 
-					</li>
-					
-									
+					</li>		
 				</ul>
 			</div>
 			<div id="dialog-delete-form" title="메세지 삭제" style="display:none">

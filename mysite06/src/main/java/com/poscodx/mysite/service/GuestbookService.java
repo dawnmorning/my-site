@@ -24,4 +24,12 @@ public class GuestbookService {
 	public Boolean addContents(GuestbookVo vo) {
 		return guestbookRepository.insert(vo);
 	}
+
+	public GuestbookVo addEntry(GuestbookVo guestbookVo) {
+		if(guestbookRepository.insert(guestbookVo)) {
+            return guestbookVo; // 성공적으로 추가된 경우
+        }
+        return null; // 추가하지 못한 경우
+	}
+
 }
