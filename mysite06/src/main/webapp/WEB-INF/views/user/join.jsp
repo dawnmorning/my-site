@@ -14,21 +14,64 @@
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script>
+var messageBox = function(title, message, callback) {
+	$("#dialog").attr('title', title);
+	$("#dialog p").text(message);
+	$("#dialog").dialog({
+		width: 340,
+		modal: true,
+		buttons: {
+			"확인": function() {
+				$(this).dialog("close");
+			}
+		},
+		close: callback
+	});			
+}
+
 $(function(){
-	$('#join-form').submit(function(event){
-		event.preventDefault()
+	$("#join-form").submit(function(event){
+		event.preventDefault();
 		
-		// 1. 이름
-		if($("#name").vale() === ''){
-			
-			
+		//1. 이름
+		if($("#name").val() === '') {
+			messageBox('회원가입', '이름은 필수 항목 입니다.', function() {
+				$("#name").focus();
+			});
+			return;
 		}
-	})
+		
+		//2. 이메일
+		if($("#email").val() === '') {
+			messageBox('회원가입', '이메일은 필수 항목 입니다.', function() {
+				$("#name").focus();
+			});
+			return;
+		}
+		
+		//3. 이메일 중복 체크
+		if(!$("#img-check-email").is(':visible')) {
+			messageBox('회원가입', '이메일 중복 확인을 해주세요.');
+			return
+		}
+		
+		//4. 비밀번호
+		if($("#password").val() === '') {
+			messageBox('회원가입', '비밀번호는 필수 항목 입니다.', function() {
+				$("#password").focus();
+			});
+			return;
+		}
+		
+		//5. ok
+		this.submit();
+	});
 	
-	$("#email").change(function(){
-		$('#btn-check-email').hide();
-		$('#img-check-email').show();
-	})
+	$("#email").change(function() {
+		$('#img-check-email').hide();
+		$('#btn-check-email').show();				
+	});
+	
 	$('#btn-check-email').click(function() {
 		var email = $('#email').val();
 		if(email === '') {
@@ -47,15 +90,18 @@ $(function(){
 				
 				if(response.data) {
 					$("#dialog").dialog({
-						width:340,
+						width: 340,
 						modal: true,
 						buttons: {
-							"확인": function(){
+							"확인": function() {
 								$(this).dialog("close");
 							}
+						},
+						close: function() {
+							$("#email").val('').focus();
 						}
 					});
-					$("#email").val('').focus();
+					
 					return;
 				}
 				
@@ -130,6 +176,9 @@ $(function(){
 		</div>
 		<c:import url="/WEB-INF/views/includes/navigation.jsp" />
 		<c:import url="/WEB-INF/views/includes/footer.jsp" />
+	</div>
+	<div id="dialog" title="이메일 중복 체크">
+  		<p style="line-height:60px">사용중인 이메일입니다. 다른 이메일을 사용해 주세요.</p>
 	</div>
 </body>
 </html>
