@@ -1,9 +1,12 @@
 package com.poscodx.mysite.controller.api;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,5 +33,19 @@ public class GuestbookController {
 	public JsonResult addGuestBook(@RequestBody GuestbookVo guestbookVo) {
 		GuestbookVo createdVo = guestbookService.addEntry(guestbookVo);
 		return JsonResult.success(createdVo);
+	}
+	
+	@DeleteMapping("/{no}")
+	public JsonResult deleteGuestBook(@PathVariable("no") Long no, @RequestBody Map<String, String> params) {
+	    String password = params.get("password");
+
+	    // 비밀번호 확인 및 내용 삭제
+	    Boolean success = guestbookService.deleteContents(no, password);
+
+	    if (success) {
+	        return JsonResult.success(null);
+	    } else {
+	        return JsonResult.fail("비밀번호가 틀렸거나 삭제할 게시물이 없습니다.");
+	    }
 	}
 }
