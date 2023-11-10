@@ -1,19 +1,45 @@
 .MessageList {
   width: 100%;
   margin-top: 20px;
-  border-top: 1px solid #A9A9A9;
+  border-top: 1px solid #a9a9a9;
 }
 
 .DeleteForm {
-  padding: .5em;
+  padding: 0.5em;
   text-align: left;
 
-  label, input {
-    display: block;
+  label,
+  input {
+    display: inline-block;
     margin: 5px;
   }
+}
+/* 모달 배경 */
+.ModalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
 
-  input {
-    padding: 5px;
-  }
+/* 모달 내용 */
+.ModalContent {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 11;
+}
+
+/* 메시지 리스트와 삭제 폼을 포함하는 컨테이너 */
+.MessageListContainer {
+  width: 100%;
+  max-width: 400px; /* 모달의 최대 너비 */
+  margin: 0 auto;
 }

@@ -2,6 +2,7 @@ package com.poscodx.mysite.controller;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,8 +21,9 @@ import com.poscodx.mysite.vo.GalleryVo;
 @RestController
 @RequestMapping("/api/gallery")
 public class GalleryController {
-	
+	@Autowired
 	private final GalleryService galleryService;
+	@Autowired
 	private final FileUploadService FileUploadService;
 
 	public GalleryController(FileUploadService FileUploadService, GalleryService galleryService) {
