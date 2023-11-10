@@ -38,10 +38,9 @@ public class GuestbookController {
 	@DeleteMapping("/{no}")
 	public JsonResult deleteGuestBook(@PathVariable("no") Long no, @RequestBody Map<String, String> params) {
 	    String password = params.get("password");
-
 	    // 비밀번호 확인 및 내용 삭제
 	    Boolean success = guestbookService.deleteContents(no, password);
-
+	    System.out.println(no +  password);
 	    if (success) {
 	        return JsonResult.success(null);
 	    } else {
